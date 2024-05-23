@@ -134,6 +134,7 @@ def plot_confusion_matrix(y_true, y_pred, dataset_type):
     plt.title(f'{dataset_type} Set Confusion Matrix')
     plt.show()
 
+
     # Plot validation confusion matrix
 plot_confusion_matrix(y_val, y_val_pred, "Validation")
 

@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
 from tensorflow.keras.models import Sequential, Model
 import os
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+import joblib
 
 # Define paths to the folders
 base_dir = './datasets/dataset_ready/datasets_images'
@@ -52,21 +52,22 @@ print(f'Testing data shape: {X_test.shape}')
 print(f'Training labels shape: {y_train.shape}')
 print(f'Testing labels shape: {y_test.shape}')
 
-# Build the CNN model
+# Build the CNN model using Functional API
 
 
 def build_cnn(input_shape):
-    model = Sequential([
-        Conv2D(32, (3, 3), activation='relu', input_shape=input_shape),
-        MaxPooling2D((2, 2)),
-        Conv2D(64, (3, 3), activation='relu'),
-        MaxPooling2D((2, 2)),
-        Conv2D(128, (3, 3), activation='relu'),
-        MaxPooling2D((2, 2)),
-        Flatten(),
-        Dense(128, activation='relu'),
-        Dropout(0.5)
-    ])
+    inputs = Input(shape=input_shape)
+    x = Conv2D(32, (3, 3), activation='relu')(inputs)
+    x = MaxPooling2D((2, 2))(x)
+    x = Conv2D(64, (3, 3), activation='relu')(x)
+    x = MaxPooling2D((2, 2))(x)
+    x = Conv2D(128, (3, 3), activation='relu')(x)
+    x = MaxPooling2D((2, 2))(x)
+    x = Flatten()(x)
+    x = Dense(128, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    outputs = Dense(3, activation='softmax')(x)
+    model = Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
@@ -78,36 +79,46 @@ input_shape = (img_height, img_width, 3)
 # Build the model
 cnn_model = build_cnn(input_shape)
 
-# Call the model on a sample input to build it
-cnn_model.build(input_shape=(None, img_height, img_width, 3))
-
 # Train the model
-history = cnn_model.fit(X_train, y_train, epochs=100, validation_data=(
+history = cnn_model.fit(X_train, y_train, epochs=10, validation_data=(
     X_test, y_test), batch_size=batch_size)
 
 # Save the trained CNN model
-cnn_model.save('cnn_model.h5')
+cnn_model.save('cnn_model.keras')
 
 # Evaluate the model
 cnn_loss, cnn_accuracy = cnn_model.evaluate(X_test, y_test)
 print(f'CNN Model Accuracy: {cnn_accuracy}')
 
-# Extract features using the trained CNN model
+# Extract features from the CNN
 feature_extractor = Model(inputs=cnn_model.input,
-                          outputs=cnn_model.layers[-2].output)
+                          outputs=cnn_model.get_layer('flatten').output)
+
+# Ensure the feature extractor model is built by calling it on some data
+dummy_input = np.zeros((1, img_height, img_width, 3))
+_ = feature_extractor.predict(dummy_input)
+
+# Extract features
 X_train_features = feature_extractor.predict(X_train)
 X_test_features = feature_extractor.predict(X_test)
 
-# Train an SVM classifier on the extracted features
-svm_classifier = SVC(kernel='linear')
-svm_classifier.fit(X_train_features, y_train)
+# Train the SVM model on the extracted features
+svm_model = SVC(kernel='linear')
+svm_model.fit(X_train_features, y_train)
 
-# Predict using the SVM classifier
-y_pred = svm_classifier.predict(X_test_features)
 
-# Evaluate the SVM classifier
-svm_accuracy = accuracy_score(y_test, y_pred)
-print(f'SVM Classifier Accuracy: {svm_accuracy}')
+# Save the trained model to a file with compression
+model_filename = 'CNN+SVM_model_compressed.pkl'
+# compress=3 is a reasonable trade-off between speed and size
+joblib.dump(svm_model, model_filename, compress=3)
+
+print(f"Compressed model saved to {model_filename}")
+# Make predictions with the SVM
+svm_predictions = svm_model.predict(X_test_features)
+
+# Evaluate the SVM model
+svm_accuracy = accuracy_score(y_test, svm_predictions)
+print(f'SVM Model Accuracy: {svm_accuracy}')
 
 # Plot training & validation accuracy values
 plt.figure(figsize=(10, 6))
