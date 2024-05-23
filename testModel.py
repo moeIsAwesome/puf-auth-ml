@@ -1,5 +1,5 @@
-import numpy as np
 import joblib
+import numpy as np
 
 # Function to read .bin file and convert to flat array of bytes
 
@@ -22,8 +22,8 @@ def pad_or_truncate(sequence, length):
 # Fixed length for the input sequences
 fixed_length = 1048585  # Define a suitable length based on your data
 
-# Load the saved model
-loaded_model = joblib.load('./svm_model.pkl')
+# Load the compressed model
+loaded_model = joblib.load('svm_model_compressed.pkl')
 print("Model loaded from disk")
 
 # Function to make predictions on new PUF responses
@@ -51,6 +51,6 @@ def predict_puf_response(model, file_path):
 
 
 # Example usage
-new_puf_file = './Ex02.docx'
+new_puf_file = './datasets/dataset_ready/RPi2Dump/rpi2_0_aug3_2.bin'
 predicted_puf = predict_puf_response(loaded_model, new_puf_file)
 print(f"The response belongs to: {predicted_puf}")

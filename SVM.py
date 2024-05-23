@@ -87,10 +87,12 @@ print(f"Test Recall: {test_recall * 100:.2f}%")
 print(f"Test F1 Score: {test_f1 * 100:.2f}%")
 
 
-# Save the trained model to a file
-model_filename = 'svm_model.pkl'
-joblib.dump(svm_model, model_filename)
-print(f"Model saved to {model_filename}")
+# Save the trained model to a file with compression
+model_filename = 'svm_model_compressed.pkl'
+# compress=3 is a reasonable trade-off between speed and size
+joblib.dump(svm_model, model_filename, compress=3)
+print(f"Compressed model saved to {model_filename}")
+
 
 # Visualizations
 
@@ -131,7 +133,6 @@ def plot_confusion_matrix(y_true, y_pred, dataset_type):
     plt.ylabel('Actual')
     plt.title(f'{dataset_type} Set Confusion Matrix')
     plt.show()
-
 
     # Plot validation confusion matrix
 plot_confusion_matrix(y_val, y_val_pred, "Validation")
