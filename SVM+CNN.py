@@ -1,3 +1,5 @@
+# TODO: Since the primary goal is to use the CNN solely for feature extraction and then train an SVM on those features, we don't need to save or evaluate the CNN model separately. The essential part is to extract the features from the CNN and then use those features for training the SVM. So, we can remove the code that saves and evaluates the CNN model.
+
 import matplotlib.pyplot as plt
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
 from tensorflow.keras.models import Sequential, Model
