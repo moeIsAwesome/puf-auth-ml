@@ -20,8 +20,8 @@ def compare_files(file1_path, file2_path):
 
 
 # File paths
-file1_path = './RPi2Dump/rpi2_2.bin'
-file2_path = './doro.bin'
+file1_path = './dataset/data/RPi2Dump/rpi2_0.bin'
+file2_path = './dataset/data/RPi2Dump/corrupted/rpi2_0_corrMid.bin'
 
 # Compare the files and print the percentage difference
 percentage_difference = compare_files(file1_path, file2_path)
