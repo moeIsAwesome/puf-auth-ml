@@ -1,4 +1,3 @@
-# Import necessary libraries
 import joblib
 import os
 import numpy as np
@@ -17,21 +16,25 @@ def read_bin_file(file_path):
         byte_data = file.read()
         return np.frombuffer(byte_data, dtype=np.uint8)
 
-
 # Load data
+
+
 def load_data(folder_path, label):
     data = []
     labels = []
     for file_name in tqdm(os.listdir(folder_path), desc=f"Loading {folder_path}"):
         file_path = os.path.join(folder_path, file_name)
-        data.append(read_bin_file(file_path))
+        file_data = read_bin_file(file_path)
+        # Debugging statement
+        print(f"Loaded {file_path} with shape {file_data.shape}")
+        data.append(file_data)
         labels.append(label)
     return data, labels
 
 
 # Paths to folders
-folder_paths = ["./datasets/dataset_ready/RPi1Dump",
-                "./datasets/dataset_ready/RPi2Dump", "./datasets/dataset_ready/RPi3Dump"]
+folder_paths = ["./dataset/data/RPi1Dump",
+                "./dataset/data/RPi2Dump", "./dataset/data/RPi3Dump"]
 labels = [0, 1, 2]
 
 # Read data from all folders
@@ -42,26 +45,26 @@ for folder_path, label in zip(folder_paths, labels):
     all_data.extend(data)
     all_labels.extend(label)
 
-
 # Convert to numpy arrays
-all_data = np.array(all_data)
-all_labels = np.array(all_labels)
-
+try:
+    all_data = np.array(all_data)
+    all_labels = np.array(all_labels)
+except ValueError as e:
+    print("Error converting to numpy arrays:", e)
+    for i, data in enumerate(all_data):
+        print(f"Data at index {i} has shape {data.shape}")
 
 # Split the data into training and testing sets (80-20 split)
 X_train, X_test, y_train, y_test = train_test_split(
     all_data, all_labels, test_size=0.2, random_state=42)
 
-
 # Further split the training set to create a validation set (20% of training set)
 X_train, X_val, y_train, y_val = train_test_split(
     X_train, y_train, test_size=0.2, random_state=42)
 
-
-# Create and train the SVM model
-svm_model = SVC(kernel='linear', random_state=42)
+# Create and train the SVM model with probability=True
+svm_model = SVC(kernel='linear', random_state=42, probability=True)
 svm_model.fit(X_train, y_train)
-
 
 # Validate the model
 y_val_pred = svm_model.predict(X_val)
@@ -86,13 +89,11 @@ print(f"Test Precision: {test_precision * 100:.2f}%")
 print(f"Test Recall: {test_recall * 100:.2f}%")
 print(f"Test F1 Score: {test_f1 * 100:.2f}%")
 
-
 # Save the trained model to a file with compression
 model_filename = 'svm_model_compressed.pkl'
 # compress=3 is a reasonable trade-off between speed and size
 joblib.dump(svm_model, model_filename, compress=3)
 print(f"Compressed model saved to {model_filename}")
-
 
 # Visualizations
 
@@ -119,12 +120,12 @@ def plot_metrics(y_true, y_pred, dataset_type):
 # Plot validation metrics
 plot_metrics(y_val, y_val_pred, "Validation")
 
-
 # Plot test metrics
 plot_metrics(y_test, y_test_pred, "Test")
 
-
 # Confusion Matrix
+
+
 def plot_confusion_matrix(y_true, y_pred, dataset_type):
     cm = confusion_matrix(y_true, y_pred)
     plt.figure(figsize=(8, 6))
@@ -135,9 +136,8 @@ def plot_confusion_matrix(y_true, y_pred, dataset_type):
     plt.show()
 
 
-    # Plot validation confusion matrix
+# Plot validation confusion matrix
 plot_confusion_matrix(y_val, y_val_pred, "Validation")
-
 
 # Plot test confusion matrix
 plot_confusion_matrix(y_test, y_test_pred, "Test")

@@ -6,13 +6,14 @@ import re
 # Define the base directory where the datasets folder is located
 datasets_dir = "./dataset/data"
 jar_file_path = "./dataset/scripts/puf-tool.jar"
-corruption_percentage = 100
+corruption_percentage = 75
 
 # Define the corruption parameters
 corruption_command = f"java -jar {jar_file_path} corrupt -b 8388608 -p {corruption_percentage} -c {{}}"
 
 # List of PUF folders
 puf_folders = ["RPi1Dump", "RPi2Dump", "RPi3Dump"]
+
 
 # Number of bytes in the header
 header_size = 9  # adjust if the header size is different

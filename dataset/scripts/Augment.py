@@ -2,15 +2,15 @@ import os
 import shutil
 import subprocess
 import re
+import time
 
 # Define the base directory where the datasets folder is located
 datasets_dir = "./dataset/data"
 jar_file_path = "./dataset/scripts/puf-tool.jar"
-f_0 = 1024
-f_1 = 1024
+f_0 = 256
+f_1 = 256
 
 # Define the augmentation parameters
-
 augmentation_command = f"java -jar {jar_file_path} augment -a 5 -b 8388608 -f0 {f_0} -f1 {f_1} -c {{}}"
 
 # List of PUF folders
@@ -67,14 +67,25 @@ def augment_data():
 
                 # Assuming the augmentation tool generates files with a pattern like _aug1.bin, _aug2.bin, etc.
                 # Adjust range if the number of augmentations is different
-                for aug_index in range(5):
+                for aug_index in range(1, 6):  # Assuming it generates aug1 to aug5
                     augmented_file_name = file_name.replace(
                         ".bin", f"_aug{aug_index}.bin")
                     augmented_file_path = os.path.join(
                         augmented_folder_path, augmented_file_name)
                     if os.path.exists(augmented_file_path):
+                        print(f"Adding header to {augmented_file_path}")
                         add_header_to_augmented_file(
                             augmented_file_path, header)
+                    else:
+                        print(
+                            f"Augmented file {augmented_file_path} does not exist, retrying...")
+                        time.sleep(1)  # Wait a bit and try again
+                        if os.path.exists(augmented_file_path):
+                            add_header_to_augmented_file(
+                                augmented_file_path, header)
+                        else:
+                            print(
+                                f"Augmented file {augmented_file_path} still does not exist, skipping...")
 
         # Delete the copied original files from the augmented folder
         for file_name in os.listdir(augmented_folder_path):

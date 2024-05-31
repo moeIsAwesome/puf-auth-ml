@@ -1,7 +1,11 @@
+# predict_model.py
+
 import joblib
 import numpy as np
 
 # Function to read .bin file and convert to flat array of bytes
+
+
 def read_bin_file(file_path):
     with open(file_path, 'rb') as file:  # Open the file in binary mode
         byte_data = file.read()
@@ -9,27 +13,31 @@ def read_bin_file(file_path):
 
 
 # Load the compressed model
-loaded_model = joblib.load('svm_model_compressed.pkl')
+model_filename = 'svm_model_compressed.pkl'
+loaded_model = joblib.load(model_filename)
+print(f"Loaded model from {model_filename}")
+
+# Function to make predictions on new PUF responses with confidence scores
 
 
-# Function to make predictions on new PUF responses
 def predict_puf_response(model, file_path):
     # Read the binary file and convert to a flat array of bytes
     response = read_bin_file(file_path)
-
     # Reshape the response to match the expected input shape for the model
     response = response.reshape(1, -1)
-
     # Predict the PUF label
     prediction = model.predict(response)
-
+    prediction_proba = model.predict_proba(response)
     # Map the prediction to the corresponding PUF label
     puf_labels = {0: 'RPi1', 1: 'RPi2', 2: 'RPi3'}
     predicted_label = puf_labels[prediction[0]]
-    print(predicted_label)
-    return predicted_label
+    confidence_score = prediction_proba[0][prediction[0]]
+    print(
+        f"Predicted Label: {predicted_label}, Confidence Score: {confidence_score:.2f}")
+    return predicted_label, confidence_score
 
 
 # Example usage
-new_puf_file = './datasets/dataset_ready/RPi1Dump/rpi1_0_aug3_2.bin'
-predicted_puf = predict_puf_response(loaded_model, new_puf_file)
+new_puf_file = './dataset/data/CorrTest/30-percent-corrupted/rpi1_0_corrBot.bin'
+predicted_puf, confidence = predict_puf_response(loaded_model, new_puf_file)
+
