@@ -29,5 +29,5 @@ def predict_puf_response(model, file_path):
     return predicted_label, confidence_score
 
 # Example usage
-new_puf_file = './dataset/data/RPi1Dump/rpi1_0_corrMid.bin'
+new_puf_file = './dataset/data/RPi2Dump/rpi2_13.bin'
 predicted_puf, confidence = predict_puf_response(loaded_model, new_puf_file)
