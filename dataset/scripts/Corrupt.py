@@ -6,7 +6,7 @@ import re
 # Define the base directory where the datasets folder is located
 datasets_dir = "./dataset/data"
 jar_file_path = "./dataset/scripts/puf-tool.jar"
-corruption_percentage = 75
+corruption_percentage = 80
 
 # Define the corruption parameters
 corruption_command = f"java -jar {jar_file_path} corrupt -b 8388608 -p {corruption_percentage} -c {{}}"
