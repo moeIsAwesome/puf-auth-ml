@@ -25,9 +25,9 @@ def append_header_to_augmented(original_file, augmented_file, output_file, heade
 # Define file paths
 
 
-original_file = './RPi2Dump/rpi2_0.bin'
-augmented_file = './rpi2_0_aug7.bin'
-output_file = './rpi2_0_aug7.bin'
+original_file = './dataset/data/RPi3Dump/rpi3_0.bin'
+augmented_file = './dataset/scripts/rnd3.bin'
+output_file = './rnd3.bin'
 header_size = 9  # Specify the size of the header in bytes
 
 # Append header
