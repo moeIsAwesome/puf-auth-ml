@@ -8,7 +8,7 @@ def read_bin_file(file_path):
         return np.frombuffer(byte_data, dtype=np.uint8)
 
 # Load the compressed model
-model_filename = 'svm_model_compressed.pkl'
+model_filename = 'svm_model_all-intact-and-all-30-percent.pkl'
 loaded_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 
@@ -21,6 +21,7 @@ def predict_puf_response(model, file_path):
     # Predict the PUF label
     prediction = model.predict(response)
     prediction_proba = model.predict_proba(response)
+    print(f"Prediction Probabilities: {prediction_proba}")
     # Map the prediction to the corresponding PUF label
     puf_labels = {0: 'RPi1', 1: 'RPi2', 2: 'RPi3'}
     predicted_label = puf_labels[prediction[0]]
@@ -29,5 +30,5 @@ def predict_puf_response(model, file_path):
     return predicted_label, confidence_score
 
 # Example usage
-new_puf_file = './dataset/data/RPi1Dump/rpi1_13.bin'
+new_puf_file = './dataset/random/rnd3.bin'
 predicted_puf, confidence = predict_puf_response(loaded_model, new_puf_file)
