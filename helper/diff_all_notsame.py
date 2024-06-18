@@ -24,12 +24,12 @@ def compare_files(file1_path, file2_path):
 
 def main():
     # Directories containing the files
-    directory1 = './datasets/RPi1Dump/corrupted'
-    directory2 = './datasets/RPi1Dump'
+    directory1 = './dataset/data/RPi2Dump/'
+    directory2 = './dataset/data/RPi2Dump/'
 
     # Get all files that match the naming pattern in both directories
-    file_pattern1 = 'rpi1_'
-    file_pattern2 = 'rpi1_'
+    file_pattern1 = 'rpi2_'
+    file_pattern2 = 'rpi2_'
 
     files1 = [f for f in os.listdir(directory1) if f.startswith(
         file_pattern1) and f.endswith('.bin')]
