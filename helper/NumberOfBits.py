@@ -4,7 +4,7 @@ def count_bits(file_path):
     bit_count = len(binary_data) * 8
     return bit_count
 
-file_path = './dataset/data/RPi1Dump/rpi1_42.bin'
+file_path = './dataset/data/RPi2Dump/reduced_50percent/rpi2_3.bin'
 bits = count_bits(file_path)
 print(f'The file contains {bits} bits.')
 
