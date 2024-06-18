@@ -1,8 +1,6 @@
 import os
 
-def reduce_bin_file_size(file_path, output_folder, percentage):
-    # Calculate the number of bits to keep
-    keep_bits = int(8388608 * (1 - percentage / 100))
+def reduce_bin_file_size(file_path, output_folder, keep_bits):
     keep_bytes = keep_bits // 8  # Convert bits to bytes
 
     # Read the original binary file
@@ -18,20 +16,20 @@ def reduce_bin_file_size(file_path, output_folder, percentage):
     with open(output_file_path, 'wb') as f:
         f.write(data[:keep_bytes])
 
-def process_folder(input_folder, percentage):
+def process_folder(input_folder, keep_bits):
     # Define the output folder path
-    output_folder = os.path.join(input_folder, f"reduced_{percentage}percent")
+    output_folder = os.path.join(input_folder, f"reduced_to_{keep_bits}bits")
     # Iterate over all files in the folder
     for filename in os.listdir(input_folder):
         if filename.endswith(".bin"):
             file_path = os.path.join(input_folder, filename)
-            reduce_bin_file_size(file_path, output_folder, percentage)
+            reduce_bin_file_size(file_path, output_folder, keep_bits)
             print(f"Processed {filename}")
 
 if __name__ == "__main__":
-    # Set the folder path and percentage here
-    input_folder = "./dataset/data/RPi2Dump/"  # Replace with the actual folder path
-    percentage = 50  # Replace with the desired percentage
+    # Set the folder path and number of bits to keep here
+    input_folder = "./dataset/data/RPi1Dump/"  # Replace with the actual folder path
+    keep_bits = 16  # Replace with the desired number of bits to keep
 
-    process_folder(input_folder, percentage)
+    process_folder(input_folder, keep_bits)
     print("Processing complete.")
