@@ -23,6 +23,6 @@ def split_folder(input_folder, output_folder, percentage=0.2):
     print(f"Moved {len(files_to_move)} files to {output_folder}")
 
 # Example usage:
-input_folder = './dataset/data/RPi1Dump/'
-output_folder = './dataset/data/test/RPi1Dump/'
+input_folder = './dataset/data/RPi2Dump/'
+output_folder = './dataset/data/test/RPi2Dump/'
 split_folder(input_folder, output_folder, percentage=0.2)
