@@ -8,7 +8,7 @@ def read_bin_file(file_path):
         return np.frombuffer(byte_data, dtype=np.uint8)
 
 # Load the compressed model
-model_filename = './reports/trained_with_intact_and_30p_full_length/svm_model_trained_with_all_intact_and_all_30p_for_all_percentage_except_30_test.pkl'
+model_filename = 'svm_model_trained_with_all_intact_all_augmented_all_curropted_for_test_on_all_curropted_except_30p.pkl'
 loaded_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 
@@ -30,5 +30,5 @@ def predict_puf_response(model, file_path):
     return predicted_label, confidence_score
 
 # Example usage
-new_puf_file = './dataset/random/rnd_8388608/rnd.bin'
+new_puf_file = './dataset/random/rnd_8388608/rnd1.bin'
 predicted_puf, confidence = predict_puf_response(loaded_model, new_puf_file)
