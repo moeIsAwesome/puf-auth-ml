@@ -1,7 +1,7 @@
 import os
 import shutil
 import random
-from math import ceil
+from math import floor
 
 def split_folder(input_folder, output_folder, percentage=0.2):
     # Ensure the output folder exists
@@ -11,7 +11,7 @@ def split_folder(input_folder, output_folder, percentage=0.2):
     all_files = [f for f in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder, f))]
 
     # Calculate the number of files to move
-    num_files_to_move = ceil(len(all_files) * percentage)
+    num_files_to_move = floor(len(all_files) * percentage)
 
     # Randomly select files to move
     files_to_move = random.sample(all_files, num_files_to_move)
