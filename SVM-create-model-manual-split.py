@@ -7,6 +7,12 @@ from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import time
+import logging
+
+# Setup logging
+logging.basicConfig(filename='svm_training_log.log', level=logging.INFO,
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 # Function to read .bin file and convert to flat array of bytes
 def read_bin_file(file_path):
@@ -23,6 +29,7 @@ def load_data(folder_path, label):
         file_data = read_bin_file(file_path)
         # Debugging statement
         print(f"Loaded {file_path} with shape {file_data.shape}")
+        logging.info(f"Loaded {file_path} with shape {file_data.shape}")
         data.append(file_data)
         labels.append(label)
     return data, labels
@@ -45,8 +52,10 @@ try:
     train_labels_all = np.array(train_labels_all)
 except ValueError as e:
     print("Error converting to numpy arrays:", e)
+    logging.error(f"Error converting to numpy arrays: {e}")
     for i, data in enumerate(train_data):
         print(f"Data at index {i} has shape {data.shape}")
+        logging.error(f"Data at index {i} has shape {data.shape}")
 
 # Paths to folders for test data
 test_folder_paths = ["./dataset/data/test/RPi1Dump", "./dataset/data/test/RPi2Dump", "./dataset/data/test/RPi3Dump"]
@@ -66,15 +75,26 @@ try:
     test_labels_all = np.array(test_labels_all)
 except ValueError as e:
     print("Error converting to numpy arrays:", e)
+    logging.error(f"Error converting to numpy arrays: {e}")
     for i, data in enumerate(test_data):
         print(f"Data at index {i} has shape {data.shape}")
+        logging.error(f"Data at index {i} has shape {data.shape}")
 
 # Split the training data into training and validation sets (80-20 split)
 X_train, X_val, y_train, y_val = train_test_split(train_data, train_labels_all, test_size=0.2, random_state=42)
 
+# Measure the time for creating and training the SVM model
+start_time = time.time()
+
 # Create and train the SVM model with probability=True
 svm_model = SVC(kernel='linear', random_state=42, probability=True, verbose=True)
 svm_model.fit(X_train, y_train)
+
+end_time = time.time()
+training_time = end_time - start_time
+
+print(f"Time taken to create and train the SVM model: {training_time:.2f} seconds")
+logging.info(f"Time taken to create and train the SVM model: {training_time:.2f} seconds")
 
 # Validate the model
 y_val_pred = svm_model.predict(X_val)
@@ -82,6 +102,12 @@ val_accuracy = accuracy_score(y_val, y_val_pred)
 val_precision = precision_score(y_val, y_val_pred, average='weighted')
 val_recall = recall_score(y_val, y_val_pred, average='weighted')
 val_f1 = f1_score(y_val, y_val_pred, average='weighted')
+
+# Log validation metrics
+logging.info(f"Validation Accuracy: {val_accuracy * 100:.2f}%")
+logging.info(f"Validation Precision: {val_precision * 100:.2f}%")
+logging.info(f"Validation Recall: {val_recall * 100:.2f}%")
+logging.info(f"Validation F1 Score: {val_f1 * 100:.2f}%")
 
 # Test the model
 y_test_pred = svm_model.predict(test_data)
@@ -101,15 +127,24 @@ print(f"Test Recall: {test_recall * 100:.2f}%")
 print(f"Test F1 Score: {test_f1 * 100:.2f}%")
 print(f"Average Confidence: {average_confidence * 100:.2f}%")
 
+# Log test metrics
+logging.info(f"Test Accuracy: {test_accuracy * 100:.2f}%")
+logging.info(f"Test Precision: {test_precision * 100:.2f}%")
+logging.info(f"Test Recall: {test_recall * 100:.2f}%")
+logging.info(f"Test F1 Score: {test_f1 * 100:.2f}%")
+logging.info(f"Average Confidence: {average_confidence * 100:.2f}%")
+
 # Print each test instance's confidence
 for i, confidence in enumerate(test_confidences):
     print(f"Instance {i}: Confidence = {confidence * 100:.2f}%")
+    logging.info(f"Instance {i}: Confidence = {confidence * 100:.2f}%")
 
 # Save the trained model to a file with compression
-model_filename = 'svm_model_trained_with_all_30p.pkl'
+model_filename = 'svm_model_trained_with_intact_without_8_response_all_augmented_all_30p_for_test_on_intact.pkl'
 # compress=3 is a reasonable trade-off between speed and size
 joblib.dump(svm_model, model_filename, compress=3)
 print(f"Compressed model saved to {model_filename}")
+logging.info(f"Compressed model saved to {model_filename}")
 
 # Visualizations
 def plot_metrics(y_true, y_pred, dataset_type, confidences):
