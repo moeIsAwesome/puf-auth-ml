@@ -140,7 +140,7 @@ for i, confidence in enumerate(test_confidences):
     logging.info(f"Instance {i}: Confidence = {confidence * 100:.2f}%")
 
 # Save the trained model to a file with compression
-model_filename = 'svm_model_trained_with_all_intact_for_test_on_all_percentages_except_30p.pkl'
+model_filename = 'model.pkl'
 # compress=3 is a reasonable trade-off between speed and size
 joblib.dump(svm_model, model_filename, compress=3)
 print(f"Compressed model saved to {model_filename}")
