@@ -18,7 +18,7 @@ def generate_random_binary_files(jar_path, bits, num_files, output_dir):
 
 # Set the parameters
 jar_path = './dataset/scripts/puf-tool.jar'  # Path to your JAR file
-bits = 8388608  # Number of bits to generate
+bits = 512  # Number of bits to generate
 num_files = 8  # Number of random files to generate
 output_dir = f'./dataset/random/rnd_{bits}'  # Directory to save the generated files
 
