@@ -47,7 +47,7 @@ except ValueError as e:
         print(f"Data at index {i} has shape {data.shape}")
 
 # Load the pre-trained model
-model_filename = './reports/trained_with_intact_full_length/svm_model_trained_with_intact.pkl'
+model_filename = './reports/trained_with_30p_full_length/svm_model_trained_with_all_30p.pkl'
 svm_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 
