@@ -9,7 +9,7 @@ def read_bin_file(file_path):
         return np.frombuffer(byte_data, dtype=np.uint8)
 
 # Load the compressed model
-model_filename = './reports/trained_with_intact_full_length/svm_model_trained_with_intact_all.pkl'
+model_filename = './reports/trained_with_30p_full_length/model-trained-with-all-30-.pkl'
 loaded_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 
