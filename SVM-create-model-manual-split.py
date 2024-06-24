@@ -80,8 +80,8 @@ except ValueError as e:
         print(f"Data at index {i} has shape {data.shape}")
         logging.error(f"Data at index {i} has shape {data.shape}")
 
-# Split the training data into training and validation sets (80-20 split)
-X_train, X_val, y_train, y_val = train_test_split(train_data, train_labels_all, test_size=0.2, random_state=42)
+# Split the training data into training and validation sets (70% training, 10% validation, 20% testing which is already done manually)
+X_train, X_val, y_train, y_val = train_test_split(train_data, train_labels_all, test_size=0.125, random_state=42)
 
 # Measure the time for creating and training the SVM model
 start_time = time.time()

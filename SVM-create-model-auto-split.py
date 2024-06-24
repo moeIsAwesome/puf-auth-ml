@@ -51,8 +51,8 @@ except ValueError as e:
 # Split the data into training and testing sets (80-20 split)
 X_train, X_test, y_train, y_test = train_test_split(all_data, all_labels, test_size=0.2, random_state=42)
 
-# Further split the training set to create a validation set (20% of training set)
-X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+# Further split the training set to create a validation set (12.5% of training set = 10% of total data)
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.125, random_state=42)
 
 # Create and train the SVM model with probability=True
 svm_model = SVC(kernel='linear', random_state=42, probability=True)
@@ -64,10 +64,10 @@ val_accuracy = accuracy_score(y_val, y_val_pred)
 val_precision = precision_score(y_val, y_val_pred, average='weighted')
 val_recall = recall_score(y_val, y_val_pred, average='weighted')
 val_f1 = f1_score(y_val, y_val_pred, average='weighted')
-# print(f"Validation Accuracy: {val_accuracy * 100:.2f}%")
-# print(f"Validation Precision: {val_precision * 100:.2f}%")
-# print(f"Validation Recall: {val_recall * 100:.2f}%")
-# print(f"Validation F1 Score: {val_f1 * 100:.2f}%")
+print(f"Validation Accuracy: {val_accuracy * 100:.2f}%")
+print(f"Validation Precision: {val_precision * 100:.2f}%")
+print(f"Validation Recall: {val_recall * 100:.2f}%")
+print(f"Validation F1 Score: {val_f1 * 100:.2f}%")
 
 # Test the model
 y_test_pred = svm_model.predict(X_test)
@@ -118,7 +118,7 @@ def plot_metrics(y_true, y_pred, dataset_type, confidences):
     plt.show()
 
 # Plot validation metrics
-# plot_metrics(y_val, y_val_pred, "Validation", np.max(svm_model.predict_proba(X_val), axis=1))
+plot_metrics(y_val, y_val_pred, "Validation", np.max(svm_model.predict_proba(X_val), axis=1))
 
 # Plot test metrics
 plot_metrics(y_test, y_test_pred, "Test", test_confidences)
@@ -138,7 +138,7 @@ def plot_confusion_matrix(y_true, y_pred, dataset_type):
     plt.show()
 
 # Plot validation confusion matrix
-# plot_confusion_matrix(y_val, y_val_pred, "Validation")
+plot_confusion_matrix(y_val, y_val_pred, "Validation")
 
 # Plot test confusion matrix
 plot_confusion_matrix(y_test, y_test_pred, "Test")
