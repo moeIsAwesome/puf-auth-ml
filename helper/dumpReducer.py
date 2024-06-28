@@ -29,7 +29,7 @@ def process_folder(input_folder, keep_bits):
 if __name__ == "__main__":
     # Set the folder path and number of bits to keep here
     input_folder = "./dataset/data/RPi1Dump/"  # Replace with the actual folder path
-    keep_bits = 256  # Replace with the desired number of bits to keep
+    keep_bits = 64  # Replace with the desired number of bits to keep
 
     process_folder(input_folder, keep_bits)
     print("Processing complete.")

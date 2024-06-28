@@ -26,7 +26,7 @@ def load_data(folder_path, label):
     return data, labels
 
 # Paths to folders for test data
-test_folder_paths = ["./dataset/data/test/RPi1Dump", "./dataset/data/test/RPi2Dump", "./dataset/data/test/RPi3Dump"]
+test_folder_paths = ["./dataset/data/test/RPi1Dump/0-percent-corrupted/", "./dataset/data/test/RPi2Dump/0-percent-corrupted/", "./dataset/data/test/RPi3Dump/0-percent-corrupted/"]
 test_labels = [0, 1, 2]
 
 # Read test data from all folders
@@ -47,7 +47,7 @@ except ValueError as e:
         print(f"Data at index {i} has shape {data.shape}")
 
 # Load the pre-trained model
-model_filename = './reports/trained_with_augmented_full_length/model-trained-on-augmented.pkl'
+model_filename = './reports/trained_with_augmented_length_64/model-trained-on-augmented-64.pkl'
 svm_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 

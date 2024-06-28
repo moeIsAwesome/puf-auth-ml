@@ -9,7 +9,7 @@ def read_bin_file(file_path):
         return np.frombuffer(byte_data, dtype=np.uint8)
 
 # Load the compressed model
-model_filename = './reports/trained_with_augmented_full_length/model-trained-on-augmented.pkl'
+model_filename = './reports/trained_with_augmented_length_64/model-trained-on-augmented-64.pkl'
 loaded_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 
@@ -29,7 +29,7 @@ def predict_puf_response(model, file_path):
     return predicted_label, confidence_score
 
 # Directory containing the files
-directory = './dataset/random/rnd_8388608/'
+directory = './dataset/random/rnd_64/'
 
 # List to store confidence scores
 confidences = []
