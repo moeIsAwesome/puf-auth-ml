@@ -9,7 +9,7 @@ jar_file_path = "./dataset/scripts/puf-tool.jar"
 corruption_percentage = 30
 
 # Define the corruption parameters
-corruption_command = f"java -jar {jar_file_path} corrupt -b 64 -p {corruption_percentage} {{}}"
+corruption_command = f"java -jar {jar_file_path} corrupt -b 256 -p {corruption_percentage} {{}}"
 
 # List of PUF folders
 puf_folders = ["RPi1Dump", "RPi2Dump", "RPi3Dump"]
