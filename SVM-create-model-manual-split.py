@@ -35,8 +35,8 @@ def load_data(folder_path, label):
     return data, labels
 
 # Paths to folders for training data
-train_folder_paths = ["./dataset/data/RPi1Dump", "./dataset/data/RPi2Dump", "./dataset/data/RPi3Dump"]
-train_labels = [0, 1, 2]
+train_folder_paths = ["./dataset/data/RPi1Dump", "./dataset/data/RPi2Dump", "./dataset/data/RPi3Dump", "./dataset/data/Unknown"]
+train_labels = [0, 1, 2, 3]  # Updated with new class label
 
 # Read training data from all folders
 train_data = []
@@ -58,8 +58,8 @@ except ValueError as e:
         logging.error(f"Data at index {i} has shape {data.shape}")
 
 # Paths to folders for test data
-test_folder_paths = ["./dataset/data/test/RPi1Dump", "./dataset/data/test/RPi2Dump", "./dataset/data/test/RPi3Dump"]
-test_labels = [0, 1, 2]
+test_folder_paths = ["./dataset/data/test/RPi1Dump", "./dataset/data/test/RPi2Dump", "./dataset/data/test/RPi3Dump", "./dataset/data/test/Unknown"]
+test_labels = [0, 1, 2, 3]  # Updated with new class label
 
 # Read test data from all folders
 test_data = []
@@ -174,13 +174,13 @@ plot_metrics(test_labels_all, y_test_pred, "Test", test_confidences)
 
 # Confusion Matrix
 def plot_confusion_matrix(y_true, y_pred, dataset_type):
-    label_mapping = {0: 'RPi1', 1: 'RPi2', 2: 'RPi3'}
+    label_mapping = {0: 'RPi1', 1: 'RPi2', 2: 'RPi3', 3: 'Unknown'}  # Updated with new class label
     y_true_mapped = [label_mapping[label] for label in y_true]
     y_pred_mapped = [label_mapping[label] for label in y_pred]
     
-    cm = confusion_matrix(y_true_mapped, y_pred_mapped, labels=['RPi1', 'RPi2', 'RPi3'])
+    cm = confusion_matrix(y_true_mapped, y_pred_mapped, labels=['RPi1', 'RPi2', 'RPi3', 'Unknown'])  # Updated with new class label
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['RPi1', 'RPi2', 'RPi3'], yticklabels=['RPi1', 'RPi2', 'RPi3'])
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['RPi1', 'RPi2', 'RPi3', 'Unknown'], yticklabels=['RPi1', 'RPi2', 'RPi3', 'Unknown'])  # Updated with new class label
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
     plt.title(f'{dataset_type} Set Confusion Matrix')
