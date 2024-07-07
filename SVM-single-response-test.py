@@ -8,7 +8,7 @@ def read_bin_file(file_path):
         return np.frombuffer(byte_data, dtype=np.uint8)
 
 # Load the compressed model
-model_filename = 'model-trained-on-augmented-with-unknown-class.pkl'
+model_filename = './reports/trained_with_augmented_4_classes_full_length/model-trained-on-augmented-with-4-classes-full-length.pkl'
 loaded_model = joblib.load(model_filename)
 print(f"Loaded model from {model_filename}")
 
@@ -30,5 +30,5 @@ def predict_puf_response(model, file_path):
     return predicted_label, confidence_score
 
 # Example usage
-new_puf_file = './dataset/data/RPi2Dump/rpi2_0_aug10.bin'
+new_puf_file = './dataset/data/Unknown/all0.bin'
 predicted_puf, confidence = predict_puf_response(loaded_model, new_puf_file)
